@@ -85,6 +85,8 @@ int factorial(int n) {
     }
 }
 
+// Trigonometricas
+
 float seno (float num) {
     return sin(num);
 }
@@ -157,7 +159,7 @@ void dividirFraccion(int numeradorA, int denominadorA, int numeradorB, int denom
     // Obtenemos el denominadorR.
     *denominadorR = denominadorA * numeradorB;
 }
-
+// Operacion eq 2 grado.
 bool realizarCuadratica (int a, int b, int c, float *resultadoP, float *resultadoN) {
     // b^2 - 4*a*c
     bool tot_be = true;
