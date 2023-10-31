@@ -23,26 +23,59 @@ struct Datos {
 }
 
 
-#define MIDA_BUFFER 1024
+//#define MIDA_BUFFER 1024
+#define PORT 12345
 
 
-int main(int argc, char **argv)
-{
+int main() {
+    int server_socket, client_socket;
+    struct sockaddr_in server_addr, client_addr;
+    socklen_t client_addr_len = sizeof(client_addr);
 
-    if (argc == 2)
-    {
-        /* Definim variables */
-        /* Fem la feina */
-
-        int s; /* Per treballar amb el socket */
-        /* Tanquem el socket */
-        close(s);
+    server_socket = socket(AF_INET, SOCK_STREAM, 0);
+    if (server_socket == -1) {
+        perror("Error al crear el socket del servidor");
+        exit(EXIT_FAILURE);
     }
 
-    else
-    {
-        printf("El nombre de paràmetres no és el correcte!\n");
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(PORT);
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+
+    if (bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
+        perror("Error al enlazar el socket del servidor");
+        exit(EXIT_FAILURE);
     }
+
+    if (listen(server_socket, 5) < 0) {
+        perror("Error al escuchar en el socket del servidor");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Servidor en espera de conexiones...\n");
+
+    client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
+
+    // Lógica del servidor para manejar la solicitud del cliente.
+    char buffer[1024];
+    int result;
+    while (1) {
+        memset(buffer, 0, sizeof(buffer));
+        read(client_socket, buffer, sizeof(buffer));
+        printf("Recibido: %s", buffer);
+
+        if (strcmp(buffer, "exit\n") == 0) {
+            printf("Cliente ha cerrado la conexión.\n");
+            break;
+        }
+
+        // Simulamos una operación de suma.
+        sscanf(buffer, "%d", &result);
+        result = result * 2;
+        write(client_socket, &result, sizeof(result));
+    }
+
+    close(server_socket);
     return 0;
 }
 
