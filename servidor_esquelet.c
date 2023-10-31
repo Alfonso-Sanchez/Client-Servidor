@@ -63,22 +63,27 @@ float potencia(float n1, float exponent){
     return pow(n1,exponent);
 }
 
+//Funcio per a fer l'arrel quadrada amb el radicant que vulguis
 float arrelQuadrada(float n1, int radicant){
     return pow(n1, 1/radicant);
 }
 
+//Funcio que fa el modul d'un divisio
 float modul(float n1, float n2){
     return fmod(n1,n2);
 }
 
+int conversorUnitatsTemps(){
 
+    // 
+
+
+}
 
 
 /*
 
-Potenciación (^): Elevar un número a una potencia.
-Raíz cuadrada (√): Calcular la raíz cuadrada de un número.
-Módulo (%): Calcular el residuo de una división.
+
 Operaciones trigonométricas: Seno, Coseno, Tangente, etc.
 Logaritmos: Logaritmo natural (ln), logaritmo en base 10, etc.
 Conversión de unidades: Conversión entre unidades de longitud, masa, temperatura, etc.
