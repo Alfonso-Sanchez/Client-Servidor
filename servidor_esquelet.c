@@ -76,9 +76,10 @@ float modul(float n1, float n2){
     return fmod(n1,n2);
 }
 
-int conversorUnitatsTemps(){
+//Funcio que converteix un valor deciamal a binari
+int conversorDecimalBinari(){
 
-    // 
+    
 
 
 }
