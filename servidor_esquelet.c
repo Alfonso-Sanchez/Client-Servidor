@@ -16,28 +16,6 @@
 
 #define MIDA_BUFFER 1024
 
-int main(int argc, char **argv)
-{
-
-    if (argc == 2)
-    {
-        /* Definim variables */
-        /* Fem la feina */
-
-        int s; /* Per treballar amb el socket */
-        /* Tanquem el socket */
-        close(s);
-    }
-
-    else
-    {
-        printf("El nombre de paràmetres no és el correcte!\n");
-    }
-    return 0;
-}
-
-
-
 //Funcio per a sumar dos numeros
 float suma(float n1, float n2){
     return n1+n2;
@@ -73,51 +51,14 @@ float modul(float n1, float n2){
     return fmod(n1,n2);
 }
 
-void descomposarEnFactorsPrims(int num){
-
-    if (numero > 2) {
-
-        // Imprimir tots els factors 2 primer
-        while (num % 2 == 0){
-        printf("2 ");
-        num /= 2;
-        }
-
-        // Provar divisors imparells
-        for (int i = 3; i * i <= num; i += 2){
-            while (num % i == 0) {
-                printf("%d ", i);
-                num /= i;
-            }
-        }
-
-        // Si el numero restant es mes gran que 1, es un factor prim
-        if (num > 1){
-            printf("%d", num);
-        }
-    }else{
-
-        printf("ERROR. Introdueix un numero enter positiu major o igual a 2.");
-
+//Funcio recursiva que calcula el factorial
+int factorial(int n) {
+    if (n == 0 || n == 1) {
+        return 1;
+    } else {
+        return n * factorial(n - 1);
     }
 }
-
-
-
-/*
-
-
-Operaciones trigonométricas: Seno, Coseno, Tangente, etc.
-Logaritmos: Logaritmo natural (ln), logaritmo en base 10, etc.
-Conversión de unidades: Conversión entre unidades de longitud, masa, temperatura, etc.
-Factorización: Descomposición de números en factores primos.
-Ecuaciones cuadráticas: Resolver ecuaciones cuadráticas de la forma ax^2 + bx + c = 0.
-Cálculos de interés: Cálculos de interés simple y compuesto.
-Conversión de bases numéricas: Convertir entre decimal, binario, octal y hexadecimal.
-Conversión de unidades de tiempo: Conversión entre segundos, minutos, horas, días, etc.
-Constantes matemáticas: Incluir constantes como π (pi) y e (número de Euler).
-Operaciones de fracciones: Sumar, restar, multiplicar y dividir fracciones.
-*/
 
 float seno (float num) {
     return sin(num);
@@ -142,3 +83,27 @@ float arcCoseno (float num) {
 float arcTangente (float num) {
     return atan(num);
 }
+
+
+int main(int argc, char **argv)
+{
+
+    if (argc == 2)
+    {
+        /* Definim variables */
+        /* Fem la feina */
+
+        int s; /* Per treballar amb el socket */
+        /* Tanquem el socket */
+        close(s);
+    }
+
+    else
+    {
+        printf("El nombre de paràmetres no és el correcte!\n");
+    }
+    return 0;
+}
+
+
+
