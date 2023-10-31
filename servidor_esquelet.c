@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <stdbool.h>
 
 
 /* Inclusio de fitxers .h per als sockets */
@@ -14,7 +15,9 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+
 #define MIDA_BUFFER 1024
+
 
 int main(int argc, char **argv)
 {
@@ -84,17 +87,13 @@ int conversorUnitatsTemps(){
 /*
 
 
-Operaciones trigonométricas: Seno, Coseno, Tangente, etc.
-Logaritmos: Logaritmo natural (ln), logaritmo en base 10, etc.
-Conversión de unidades: Conversión entre unidades de longitud, masa, temperatura, etc.
-Factorización: Descomposición de números en factores primos.
-Ecuaciones cuadráticas: Resolver ecuaciones cuadráticas de la forma ax^2 + bx + c = 0.
-Cálculos de interés: Cálculos de interés simple y compuesto.
-Conversión de bases numéricas: Convertir entre decimal, binario, octal y hexadecimal.
-Conversión de unidades de tiempo: Conversión entre segundos, minutos, horas, días, etc.
-Constantes matemáticas: Incluir constantes como π (pi) y e (número de Euler).
-Operaciones de fracciones: Sumar, restar, multiplicar y dividir fracciones.
+
+Logaritmos: Logaritmo natural (ln), logaritmo en base 10, etc. EDU
+Factorización: Descomposición de números en factores primos. EDU
 */
+
+
+// Operaciones trigonometricas. 
 
 float seno (float num) {
     return sin(num);
@@ -119,3 +118,79 @@ float arcCoseno (float num) {
 float arcTangente (float num) {
     return atan(num);
 }
+
+// Operaciones con fracciones
+// Función para calcular el MCD usando el algoritmo de Euclides
+int calcularMCD(int a, int b) {
+    while (b != 0) {
+        int temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
+}
+
+void sumarFraccion(int numeradorA, int denominadorA, int numeradorB, int denominadorB, int *numeradorR, int *denominadorR) {
+    // Obtener factor común entre denominadorA y denominadorB
+    *denominadorR = (denominadorA * denominadorB) / calcularMCD(denominadorA, denominadorB);
+
+    // Ajustar numeradores según el nuevo denominador común
+    numeradorA = numeradorA * (*denominadorR / denominadorA);
+    numeradorB = numeradorB * (*denominadorR / denominadorB);
+
+    // Sumar los numeradores
+    *numeradorR = numeradorA + numeradorB;
+}
+
+void restarFraccion(int numeradorA, int denominadorA, int numeradorB, int denominadorB, int *numeradorR, int *denominadorR) {
+    // Obtener factor común entre denominadorA y denominadorB
+    *denominadorR = (denominadorA * denominadorB) / calcularMCD(denominadorA, denominadorB);
+
+    // Ajustar numeradores según el nuevo denominador común
+    numeradorA = numeradorA * (*denominadorR / denominadorA);
+    numeradorB = numeradorB * (*denominadorR / denominadorB);
+
+    // Restar los numeradores
+    *numeradorR = numeradorA - numeradorB;
+}
+
+void multiplicarFraccion(int numeradorA, int denominadorA, int numeradorB, int denominadorB, int *numeradorR, int *denominadorR) {
+    // Obtenemos el numeradorR.
+    *numeradorR = numeradorA * numeradorB;
+    // Obtenemos el denominadorR.
+    *denominadorR = denominadorA * denominadorB;
+}
+
+void dividirFraccion(int numeradorA, int denominadorA, int numeradorB, int denominadorB, int *numeradorR, int *denominadorR) {
+    // Obtenemos el numeradorR.
+    *numeradorR = numeradorA * denominadorB;
+    // Obtenemos el denominadorR.
+    *denominadorR = denominadorA * numeradorB;
+}
+
+bool realizarCuadratica (int a, int b, int c, float *resultadoP, float *resultadoN) {
+    // b^2 - 4*a*c
+    bool tot_be = true;
+    float raiz = pow(b, 2) - (4 * a * c);
+    if (raiz < 0) {
+        tot_be = false;
+    } else
+    {
+          raiz = sqrt(raiz);
+          int dosa = 2*a;
+          int bneg = b * (-1);
+          *resultadoP = (bneg + raiz) / dosa;
+          *resultadoN = (bneg - raiz) / dosa;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
