@@ -71,9 +71,6 @@ int  modul(float n1, float n2){
     return n1 % n2;
 }
 
-
-
-
 /*
 
 Potenciación (^): Elevar un número a una potencia.
