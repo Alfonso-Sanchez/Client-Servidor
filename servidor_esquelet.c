@@ -76,7 +76,14 @@ float modul(float n1, float n2){
     return fmod(n1,n2);
 }
 
-// Operaciones trigonometricas. 
+//Funcio recursiva que calcula el factorial
+int factorial(int n) {
+    if (n == 0 || n == 1) {
+        return 1;
+    } else {
+        return n * factorial(n - 1);
+    }
+}
 
 float seno (float num) {
     return sin(num);
