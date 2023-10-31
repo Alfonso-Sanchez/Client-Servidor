@@ -76,22 +76,6 @@ float modul(float n1, float n2){
     return fmod(n1,n2);
 }
 
-//Funcio que converteix un valor deciamal a binari
-int conversorDecimalBinari(){
-
-    
-
-
-}
-
-
-/*
-
-
-
-Logaritmos: Logaritmo natural (ln), logaritmo en base 10, etc. EDU
-Factorización: Descomposición de números en factores primos. EDU
-*/
 // Operaciones trigonometricas. 
 
 float seno (float num) {
