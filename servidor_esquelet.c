@@ -91,8 +91,6 @@ int conversorUnitatsTemps(){
 Logaritmos: Logaritmo natural (ln), logaritmo en base 10, etc. EDU
 Factorización: Descomposición de números en factores primos. EDU
 */
-
-
 // Operaciones trigonometricas. 
 
 float seno (float num) {
