@@ -94,8 +94,28 @@ Conversión de bases numéricas: Convertir entre decimal, binario, octal y hexad
 Conversión de unidades de tiempo: Conversión entre segundos, minutos, horas, días, etc.
 Constantes matemáticas: Incluir constantes como π (pi) y e (número de Euler).
 Operaciones de fracciones: Sumar, restar, multiplicar y dividir fracciones.
-
 */
 
+float seno (float num) {
+    return sin(num);
+}
 
-float funcionesTrigonometricas()
+float coseno (float num) {
+    return cos(num);
+}
+
+float tangente (float num) {
+    return tan(num);
+}
+
+float arcSeno (float num) {
+    return asin(num);
+}
+
+float arcCoseno (float num) {
+    return acos(num);
+}
+
+float arcTangente (float num) {
+    return atan(num);
+}
