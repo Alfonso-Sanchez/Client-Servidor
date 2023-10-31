@@ -73,12 +73,35 @@ float modul(float n1, float n2){
     return fmod(n1,n2);
 }
 
-int conversorUnitatsTemps(){
+void descomposarEnFactorsPrims(int num){
 
-    // 
+    if (numero > 2) {
 
+        // Imprimir tots els factors 2 primer
+        while (num % 2 == 0){
+        printf("2 ");
+        num /= 2;
+        }
 
+        // Provar divisors imparells
+        for (int i = 3; i * i <= num; i += 2){
+            while (num % i == 0) {
+                printf("%d ", i);
+                num /= i;
+            }
+        }
+
+        // Si el numero restant es mes gran que 1, es un factor prim
+        if (num > 1){
+            printf("%d", num);
+        }
+    }else{
+
+        printf("ERROR. Introdueix un numero enter positiu major o igual a 2.");
+
+    }
 }
+
 
 
 /*
