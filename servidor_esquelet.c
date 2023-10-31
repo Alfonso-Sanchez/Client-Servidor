@@ -67,9 +67,12 @@ float arrelQuadrada(float n1, int radicant){
     return pow(n1, 1/radicant);
 }
 
-int  modul(float n1, float n2){
-    return n1 % n2;
+float modul(float n1, float n2){
+    return fmod(n1,n2);
 }
+
+
+
 
 /*
 
