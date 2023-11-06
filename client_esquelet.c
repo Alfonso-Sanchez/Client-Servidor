@@ -14,6 +14,28 @@
 
 //#define MIDA_BUFFER 1024
 #define PORT 12345
+void menu () {
+    
+    printf("1. Suma\n");
+    printf("2. Resta\n");
+    printf("3. Multiplicacion\n");
+    printf("4. Division\n");
+    printf("5. Seno\n");
+    printf("6. Coseno\n");
+    printf("7. Tangente\n");
+    printf("8. ArcoSeno\n");
+    printf("9. ArcoCoseno\n");
+    printf("10. ArcoTangente\n");
+    printf("11. Potencia\n");
+    printf("12. Raiz Quadrada\n");
+    printf("13. Modulo\n");
+    printf("14. Suma de Fracciones\n");
+    printf("15. Resta de Fracciones\n");
+    printf("16. Multiplicacion de Fracciones\n");
+    printf("17. Division de Fracciones\n");
+    printf("18. Realizar operacion quadratica\n");
+}
+
 
 int main() {
     int client_socket;
@@ -38,10 +60,12 @@ int main() {
     int result;
 
     while (1) {
+        
+        menu();
         printf("Ingrese un número (o 'exit' para salir): ");
-        fgets(input, sizeof(input), stdin);
+        fgets(input, sizeof(input), stdin); // dato cliente 
 
-        write(client_socket, input, strlen(input));
+        write(client_socket, input, strlen(input)); // envio a servidor
 
         if (strcmp(input, "exit\n") == 0) {
             break;
