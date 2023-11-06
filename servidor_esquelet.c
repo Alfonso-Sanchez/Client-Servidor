@@ -15,6 +15,13 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+struct Datos {
+    short id;           // Id del usuario
+    short opcion;       // Operacion que escoja el usuario
+    int numeros[4];     // Numeros maximos que introducira el usuario
+    short cookies[50];
+}
+
 
 #define MIDA_BUFFER 1024
 
