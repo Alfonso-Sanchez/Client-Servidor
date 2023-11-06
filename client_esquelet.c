@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 /* Inclusio de fitxers .h per als sockets */
 #include <sys/socket.h>
@@ -12,9 +13,15 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-//#define MIDA_BUFFER 1024
+#define MIDA_BUFFER 1024
 #define PORT 12345
 
+struct Datos {
+    //short id;           // Id del usuario
+    short opcion;       // Operacion que escoja el usuario
+    int numeros[4];     // Numeros maximos que introducira el usuario
+    //short cookies[50];
+};
 
 void menu () {
     
@@ -42,6 +49,8 @@ void menu () {
 int main() {
     int client_socket;
     struct sockaddr_in server_addr;
+    struct Datos datos;
+
 
     client_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (client_socket == -1) {
@@ -58,25 +67,28 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    char input[1024];
+    char input[MIDA_BUFFER];
     int result;
+    bool salir;
 
     while (1) {
         
         menu();
-        printf("Ingrese un número (o 'exit' para salir): ");
-        fgets(input, sizeof(input), stdin); // dato cliente 
+        int operacion;
+        printf("Ingrese una operacion a realizar (o 'num fuera de lista' para salir): ");
+        //fgets(input, sizeof(input), stdin); // dato cliente 
 
-        write(client_socket, input, strlen(input)); // envio a servidor
+        scanf("%d", &operacion);
 
-        if (strcmp(input, "exit\n") == 0) {
-            break;
+        if (operacion < 1 || operacion > 18) {
+            salir = true;
         }
+        write(client_socket, &salir, sizeof(salir)); // Indicamos si se va a cerrar la conexion con el cliente. 
 
-        read(client_socket, &result, sizeof(result));
-        printf("Resultado: %d\n", result);
+        datos.opcion = operacion;
+        write(client_socket, &datos.opcion, sizeof(datos.opcion));
+
     }
-
     close(client_socket);
     return 0;
 }

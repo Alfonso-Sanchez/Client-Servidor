@@ -16,10 +16,10 @@
 #include <unistd.h>
 
 struct Datos {
-    short id;           // Id del usuario
+    //short id;           // Id del usuario
     short opcion;       // Operacion que escoja el usuario
     int numeros[4];     // Numeros maximos que introducira el usuario
-    short cookies[50];
+    //short cookies[50];
 };
 
 
@@ -51,29 +51,38 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    printf("Servidor en espera de conexiones...\n");
+    
 
-    client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
+    
 
     // Lógica del servidor para manejar la solicitud del cliente.
-    char buffer[1024];
-    int result;
+    
     while (1) {
-        memset(buffer, 0, sizeof(buffer));
-        read(client_socket, buffer, sizeof(buffer));
-        printf("Recibido: %s", buffer);
+        char buffer[1024];
+        int result;
+        bool salir;
+        printf("Servidor en espera de conexiones...\n");
+        client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
+        while (1) {
+            memset(buffer, 0, sizeof(buffer));
+            read (client_socket, &salir, sizeof(salir));
+            if (salir) {
+                printf("Cliente ha cerrado la conexión.\n");
+                break;
+            }
+            
+            struct Datos datos;
 
-        if (strcmp(buffer, "exit\n") == 0) {
-            printf("Cliente ha cerrado la conexión.\n");
-            break;
+            read(client_socket, &datos.opcion, sizeof(datos.opcion));
+            printf("Recibido: %hd\n", datos.opcion);
+
+            // Simulamos una operación de suma.
+            sscanf(buffer, "%d", &result);
+            result = result * 2;
+            write(client_socket, &result, sizeof(result));
         }
-
-        // Simulamos una operación de suma.
-        sscanf(buffer, "%d", &result);
-        result = result * 2;
-        write(client_socket, &result, sizeof(result));
+        close(client_socket);
     }
-
     close(server_socket);
     return 0;
 }
