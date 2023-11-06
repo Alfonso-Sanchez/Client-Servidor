@@ -14,6 +14,8 @@
 
 //#define MIDA_BUFFER 1024
 #define PORT 12345
+
+
 void menu () {
     
     printf("1. Suma\n");
