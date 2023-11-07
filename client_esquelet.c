@@ -21,10 +21,6 @@ struct Datos {
     short opcion;       // Operacion que escoja el usuario
     float numeros[2]; // Numeros maximos que introducira el usuario
     float resultado;    
-    int fracA[2];
-    int fracB[2];
-    int res_frac[2];
-    int cuadrica[3];
     //short cookies[50];
 };
 
@@ -43,11 +39,6 @@ void menu () {
     printf("11. Potencia\n");
     printf("12. Raiz Quadrada\n");
     printf("13. Modulo\n");
-    printf("14. Suma de Fracciones\n");
-    printf("15. Resta de Fracciones\n");
-    printf("16. Multiplicacion de Fracciones\n");
-    printf("17. Division de Fracciones\n");
-    printf("18. Realizar operacion quadratica\n");
 }
 
 
@@ -215,188 +206,34 @@ int main() {
                 printf("Resultado %0.2f\n", datos.resultado);
                 break;
             case 11: // Potencia
-                // Lógica para la potencia
+                printf("Has seleccionado calcular la POTENCIA!\n");
+                printf("Numero a elevar: ");
+                scanf("%f", &datos.numeros[0]);
+                printf("Exponent: ");
+                scanf("%f", &datos.numeros[1]);
+
+                write(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
+                write(client_socket, &datos.numeros[1], sizeof(datos.numeros[1]));
+                read(client_socket, &datos.resultado, sizeof(datos.resultado));
+                printf("Resultado %0.2f\n", datos.resultado);
                 break;
             case 12: // Raiz Quadrada
-                // Lógica para la raíz cuadrada
+                printf("Has seleccionado calcular la RAIZ CUADRADA!\n");
+                printf("Numero a hacer la raiz: ");
+                scanf("%f", &datos.numeros[0]);
+
+                write(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
+                read(client_socket, &datos.resultado, sizeof(datos.resultado));
+                printf("Resultado %0.2f\n", datos.resultado);
                 break;
             case 13: // Modulo
-                // Lógica para el módulo
-                break;
-            case 14: // Suma de Fracciones
-                printf("Has seleccionado SUMA DE FRACCIONES!\n");
-                
-                printf("Fraccion A\n");
-                printf("Numerador: ");
-                scanf("%d", &datos.fracA[0]);
-                printf("\n");
-                printf("Denominador: ");
-                scanf("%d", &datos.fracA[1]);
-                 while (datos.fracA[1] == 0) {
-                    if (datos.fracA[1] == 0) {
-                        printf("No se puede dividir entre 0 :)\n");
-                    }
-                    printf("\n");
-                    printf("Denominador: ");
-                    scanf("%d", &datos.fracA[1]);
-                }
+                printf("Has seleccionado calcular el MODULO!\n");
+                printf("Numero a hacer el modulo: ");
+                scanf("%f", &datos.numeros[0]);
 
-
-                printf("Fraccion B\n");
-                printf("Numerador: ");
-                scanf("%d", &datos.fracB[0]);
-                printf("\n");
-                printf("Denominador: ");
-                scanf("%d", &datos.fracB[1]);
-                 while (datos.fracB[1] == 0) {
-                    if (datos.fracB[1] == 0) {
-                        printf("No se puede dividir entre 0 :)\n");
-                    }
-                    printf("\n");
-                    printf("Denominador: ");
-                    scanf("%d", &datos.fracB[1]);
-                }
-
-                write(client_socket, &datos.fracA[0], sizeof(datos.fracA[0]));
-                write(client_socket, &datos.fracA[0], sizeof(datos.fracA[1]));
-                write(client_socket, &datos.fracB[0], sizeof(datos.fracB[0]));
-                write(client_socket, &datos.fracB[0], sizeof(datos.fracB[1]));
-                read(client_socket, &datos.res_frac[0], sizeof(datos.res_frac[0]));
-                read(client_socket, &datos.res_frac[1], sizeof(datos.res_frac[1]));
-
-                printf("Resultat es %d | %d \n", datos.res_frac[0], datos.res_frac[1]);
-                break;
-            case 15: // Resta de Fracciones
-                 printf("Has seleccionado RESTA DE FRACCIONES!\n");
-                
-                printf("Fraccion A\n");
-                printf("Numerador: ");
-                scanf("%d", &datos.fracA[0]);
-                printf("\n");
-                printf("Denominador: ");
-                scanf("%d", &datos.fracA[1]);
-                 while (datos.fracA[1] == 0) {
-                    if (datos.fracA[1] == 0) {
-                        printf("No se puede dividir entre 0 :)\n");
-                    }
-                    printf("\n");
-                    printf("Denominador: ");
-                    scanf("%d", &datos.fracA[1]);
-                }
-
-
-                printf("Fraccion B\n");
-                printf("Numerador: ");
-                scanf("%d", &datos.fracB[0]);
-                printf("\n");
-                printf("Denominador: ");
-                scanf("%d", &datos.fracB[1]);
-                 while (datos.fracB[1] == 0) {
-                    if (datos.fracB[1] == 0) {
-                        printf("No se puede dividir entre 0 :)\n");
-                    }
-                    printf("\n");
-                    printf("Denominador: ");
-                    scanf("%d", &datos.fracB[1]);
-                }
-
-                write(client_socket, &datos.fracA[0], sizeof(datos.fracA[0]));
-                write(client_socket, &datos.fracA[0], sizeof(datos.fracA[1]));
-                write(client_socket, &datos.fracB[0], sizeof(datos.fracB[0]));
-                write(client_socket, &datos.fracB[0], sizeof(datos.fracB[1]));
-                read(client_socket, &datos.res_frac[0], sizeof(datos.res_frac[0]));
-                read(client_socket, &datos.res_frac[1], sizeof(datos.res_frac[1]));
-
-                printf("Resultat es %d | %d \n", datos.res_frac[0], datos.res_frac[1]);
-                break;
-            case 16: // Multiplicación de Fracciones
-                 printf("Has seleccionado MULTIPLACIONES DE FRACCIONES!\n");
-                
-                printf("Fraccion A\n");
-                printf("Numerador: ");
-                scanf("%d", &datos.fracA[0]);
-                printf("\n");
-                printf("Denominador: ");
-                scanf("%d", &datos.fracA[1]);
-                 while (datos.fracA[1] == 0) {
-                    if (datos.fracA[1] == 0) {
-                        printf("No se puede dividir entre 0 :)\n");
-                    }
-                    printf("\n");
-                    printf("Denominador: ");
-                    scanf("%d", &datos.fracA[1]);
-                }
-
-
-                printf("Fraccion B\n");
-                printf("Numerador: ");
-                scanf("%d", &datos.fracB[0]);
-                printf("\n");
-                printf("Denominador: ");
-                scanf("%d", &datos.fracB[1]);
-                 while (datos.fracB[1] == 0) {
-                    if (datos.fracB[1] == 0) {
-                        printf("No se puede dividir entre 0 :)\n");
-                    }
-                    printf("\n");
-                    printf("Denominador: ");
-                    scanf("%d", &datos.fracB[1]);
-                }
-
-                write(client_socket, &datos.fracA[0], sizeof(datos.fracA[0]));
-                write(client_socket, &datos.fracA[0], sizeof(datos.fracA[1]));
-                write(client_socket, &datos.fracB[0], sizeof(datos.fracB[0]));
-                write(client_socket, &datos.fracB[0], sizeof(datos.fracB[1]));
-                read(client_socket, &datos.res_frac[0], sizeof(datos.res_frac[0]));
-                read(client_socket, &datos.res_frac[1], sizeof(datos.res_frac[1]));
-
-                printf("Resultat es %d | %d \n", datos.res_frac[0], datos.res_frac[1]);
-                break;
-            case 17: // División de Fracciones
-                 printf("Has seleccionado DIVISION DE FRACCIONES!\n");
-                
-                printf("Fraccion A\n");
-                printf("Numerador: ");
-                scanf("%d", &datos.fracA[0]);
-                printf("\n");
-                printf("Denominador: ");
-                scanf("%d", &datos.fracA[1]);
-                 while (datos.fracA[1] == 0) {
-                    if (datos.fracA[1] == 0) {
-                        printf("No se puede dividir entre 0 :)\n");
-                    }
-                    printf("\n");
-                    printf("Denominador: ");
-                    scanf("%d", &datos.fracA[1]);
-                }
-
-
-                printf("Fraccion B\n");
-                printf("Numerador: ");
-                scanf("%d", &datos.fracB[0]);
-                printf("\n");
-                printf("Denominador: ");
-                scanf("%d", &datos.fracB[1]);
-                 while (datos.fracB[1] == 0) {
-                    if (datos.fracB[1] == 0) {
-                        printf("No se puede dividir entre 0 :)\n");
-                    }
-                    printf("\n");
-                    printf("Denominador: ");
-                    scanf("%d", &datos.fracB[1]);
-                }
-
-                write(client_socket, &datos.fracA[0], sizeof(datos.fracA[0]));
-                write(client_socket, &datos.fracA[0], sizeof(datos.fracA[1]));
-                write(client_socket, &datos.fracB[0], sizeof(datos.fracB[0]));
-                write(client_socket, &datos.fracB[0], sizeof(datos.fracB[1]));
-                read(client_socket, &datos.res_frac[0], sizeof(datos.res_frac[0]));
-                read(client_socket, &datos.res_frac[1], sizeof(datos.res_frac[1]));
-
-                printf("Resultat es %d | %d \n", datos.res_frac[0], datos.res_frac[1]);
-                break;
-            case 18: // Operación cuadrática
-                // Lógica para la operación cuadrática
+                write(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
+                read(client_socket, &datos.resultado, sizeof(datos.resultado));
+                printf("Resultado %0.2f\n", datos.resultado);
                 break;
             default:
                 printf("Opción no válida. Inténtalo de nuevo.\n");

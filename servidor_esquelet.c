@@ -19,10 +19,6 @@ struct Datos {
     short opcion;       // Operacion que escoja el usuario
     float numeros[2]; // Numeros maximos que introducira el usuario
     float resultado;    
-    int fracA[2];
-    int fracB[2];
-    int res_frac[2];
-    int cuadrica[3];
     //short cookies[50];
 };
 
@@ -53,12 +49,18 @@ float divisio(float n1, float n2){
 
 //Funcio per a elevar un numero a cert exponent
 float potencia(float n1, float exponent){
-    return pow(n1,exponent);
+
+    if (exponent == 0){
+        return 1;
+    }else{
+        return pow(n1,exponent);
+    }
+
 }
 
 //Funcio per a fer l'arrel quadrada amb el radicant que vulguis
-float arrelQuadrada(float n1, int radicant){
-    return pow(n1, 1/radicant);
+float arrelQuadrada(float n1){
+    return sqrt(n1);
 }
 
 //Funcio que fa el modul#define _USE_MATH_DEFINESalcula el factorial
@@ -68,6 +70,10 @@ int factorial(int n) {
     } else {
         return n * factorial(n - 1);
     }
+}
+
+float modulo(int m){
+    return abs(m);
 }
 
 // Trigonometricas
@@ -107,63 +113,6 @@ int calcularMCD(int a, int b) {
     return a;
 }
 
-void sumarFraccion(int numeradorA, int denominadorA, int numeradorB, int denominadorB, int *numeradorR, int *denominadorR) {
-   // Obtener factor común entre denominadorA y denominadorB
-    *denominadorR = (denominadorA * denominadorB) / calcularMCD(denominadorA, denominadorB);
-
-    // Ajustar numeradores según el nuevo denominador común
-    numeradorA = numeradorA * (*denominadorR / denominadorA);
-    numeradorB = numeradorB * (*denominadorR / denominadorB);
-
-    // Sumar los numeradores
-    *numeradorR = numeradorA + numeradorB; 
-
-}
-
-void restarFraccion(int numeradorA, int denominadorA, int numeradorB, int denominadorB, int *numeradorR, int *denominadorR) {
-    // Obtener factor común entre denominadorA y denominadorB
-    *denominadorR = (denominadorA * denominadorB) / calcularMCD(denominadorA, denominadorB);
-
-    // Ajustar numeradores según el nuevo denominador común
-    numeradorA = numeradorA * (*denominadorR / denominadorA);
-    numeradorB = numeradorB * (*denominadorR / denominadorB);
-
-    // Restar los numeradores
-    *numeradorR = numeradorA - numeradorB;
-}
-
-void multiplicarFraccion(int numeradorA, int denominadorA, int numeradorB, int denominadorB, int *numeradorR, int *denominadorR) {
-    // Obtenemos el numeradorR.
-    *numeradorR = numeradorA * numeradorB;
-    // Obtenemos el denominadorR.
-    *denominadorR = denominadorA * denominadorB;
-}
-
-void dividirFraccion(int numeradorA, int denominadorA, int numeradorB, int denominadorB, int *numeradorR, int *denominadorR) {
-    // Obtenemos el numeradorR.
-    *numeradorR = numeradorA * denominadorB;
-    // Obtenemos el denominadorR.
-    *denominadorR = denominadorA * numeradorB;
-}
-// Operacion eq 2 grado.
-bool realizarCuadratica (int a, int b, int c, float *resultadoP, float *resultadoN) {
-    // b^2 - 4*a*c
-    bool tot_be = true;
-    float raiz = pow(b, 2) - (4 * a * c);
-    if (raiz < 0) {
-        tot_be = false;
-    } else
-    {
-          raiz = sqrt(raiz);
-          int dosa = 2*a;
-          int bneg = b * (-1);
-          *resultadoP = (bneg + raiz) / dosa;
-          *resultadoN = (bneg - raiz) / dosa;
-    }
-    return tot_be;
-}
-
-
 
 
 int main() {
@@ -199,6 +148,7 @@ int main() {
         bool salir;
         printf("Servidor en espera de conexiones...\n");
         client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
+        printf("Cliente conectado!\n");
         while (1) {
             memset(buffer, 0, sizeof(buffer));
             read (client_socket, &salir, sizeof(salir));
@@ -265,52 +215,20 @@ int main() {
                     write(client_socket, &datos.resultado, sizeof(datos.resultado));     
                     break;
                 case 11: // Potencia
-                    // Lógica para la potencia
+                    read(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
+                    read(client_socket, &datos.numeros[1], sizeof(datos.numeros[1]));
+                    datos.resultado = potencia(datos.numeros[0], datos.numeros[1]);
+                    write(client_socket, &datos.resultado, sizeof(datos.resultado));
                     break;
                 case 12: // Raiz Quadrada
-                    // Lógica para la raíz cuadrada
+                    read(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
+                    datos.resultado = arrelQuadrada(datos.numeros[0]);
+                    write(client_socket, &datos.resultado, sizeof(datos.resultado));
                     break;
                 case 13: // Modulo
-                    // Lógica para el módulo
-                    break;
-                case 14: // Suma de Fracciones
-                    read(client_socket, &datos.fracA[0], sizeof(datos.fracA[0]));
-                    read(client_socket, &datos.fracA[1], sizeof(datos.fracA[1]));
-                    read(client_socket, &datos.fracB[0], sizeof(datos.fracB[0]));
-                    read(client_socket, &datos.fracB[1], sizeof(datos.fracB[1]));
-                    sumarFraccion(datos.fracA[0], datos.fracA[1], datos.fracB[0], datos.fracB[1], &datos.res_frac[0], &datos.res_frac[1]);
-                    write(client_socket, &datos.res_frac[0], sizeof(datos.res_frac[0]));
-                    write(client_socket, &datos.res_frac[1], sizeof(datos.res_frac[1]));
-                    break;
-                case 15: // Resta de Fracciones
-                    read(client_socket, &datos.fracA[0], sizeof(datos.fracA[0]));
-                    read(client_socket, &datos.fracA[1], sizeof(datos.fracA[1]));
-                    read(client_socket, &datos.fracB[0], sizeof(datos.fracB[0]));
-                    read(client_socket, &datos.fracB[1], sizeof(datos.fracB[1]));
-                    restarFraccion(datos.fracA[0], datos.fracA[1], datos.fracB[0], datos.fracB[1], &datos.res_frac[0], &datos.res_frac[1]);
-                    write(client_socket, &datos.res_frac[0], sizeof(datos.res_frac[0]));
-                    write(client_socket, &datos.res_frac[1], sizeof(datos.res_frac[1]));
-                    break;
-                case 16: // Multiplicación de Fracciones
-                    read(client_socket, &datos.fracA[0], sizeof(datos.fracA[0]));
-                    read(client_socket, &datos.fracA[1], sizeof(datos.fracA[1]));
-                    read(client_socket, &datos.fracB[0], sizeof(datos.fracB[0]));
-                    read(client_socket, &datos.fracB[1], sizeof(datos.fracB[1]));
-                    multiplicarFraccion(datos.fracA[0], datos.fracA[1], datos.fracB[0], datos.fracB[1], &datos.res_frac[0], &datos.res_frac[1]);
-                    write(client_socket, &datos.res_frac[0], sizeof(datos.res_frac[0]));
-                    write(client_socket, &datos.res_frac[1], sizeof(datos.res_frac[1]));
-                    break;
-                case 17: // División de Fracciones
-                    read(client_socket, &datos.fracA[0], sizeof(datos.fracA[0]));
-                    read(client_socket, &datos.fracA[1], sizeof(datos.fracA[1]));
-                    read(client_socket, &datos.fracB[0], sizeof(datos.fracB[0]));
-                    read(client_socket, &datos.fracB[1], sizeof(datos.fracB[1]));
-                    dividirFraccion(datos.fracA[0], datos.fracA[1], datos.fracB[0], datos.fracB[1], &datos.res_frac[0], &datos.res_frac[1]);
-                    write(client_socket, &datos.res_frac[0], sizeof(datos.res_frac[0]));
-                    write(client_socket, &datos.res_frac[1], sizeof(datos.res_frac[1])); // Revisar resultado!!
-                    break;
-                case 18: // Operación cuadrática
-                    // Lógica para la operación cuadrática
+                    read(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
+                    datos.resultado = modulo(datos.numeros[0]);
+                    write(client_socket, &datos.resultado, sizeof(datos.resultado));     
                     break;
                 default:
                     printf("Opción no válida. Inténtalo de nuevo.\n");
