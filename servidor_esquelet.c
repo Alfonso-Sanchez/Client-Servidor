@@ -13,6 +13,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <pthread.h>
 
 struct Datos {
     //short id;           // Id del usuario
@@ -22,9 +23,9 @@ struct Datos {
     //short cookies[50];
 };
 
-
-//#define MIDA_BUFFER 1024
+#define MAX_CLIENTS 3
 #define PORT 12345
+int num_clients = 0; // TE QUE SER UNA GLOBAL EN AQUEST CAS! 
 
 //Funcio per a sumar dos numeros
 float suma(float n1, float n2){
@@ -102,17 +103,103 @@ float arcTangente (float num) {
     return (atan(num)*180)/ M_PI;
 }
 
-// Operaciones con fracciones
-// Función para calcular el MCD usando el algoritmo de Euclides
-int calcularMCD(int a, int b) {
-    while (b != 0) {
-        int temp = b;
-        b = a % b;
-        a = temp;
-    }
-    return a;
-}
 
+void* mantenir_client(void* client_socket) {
+    int client_fd = *(int*)client_socket;
+    char buffer[1024];
+    int result;
+    bool salir;
+    while (1) {
+        memset(buffer, 0, sizeof(buffer));
+        read (client_fd, &salir, sizeof(salir));
+        if (salir) {
+            num_clients--;
+            printf("Cliente ha cerrado la conexión [%d]\n", num_clients);
+            break; // Cerramos la conexion. (Nota no podriamos hacerlo con un bool en el while por que ejecutaria todo el resto, interesa salir directamente).
+        }
+        struct Datos datos;
+        read(client_fd, &datos.opcion, sizeof(datos.opcion));
+        switch (datos.opcion) {
+                case 1: // Suma
+                    read(client_fd, &datos.numeros[0], sizeof(datos.numeros[0]));
+                    read(client_fd, &datos.numeros[1], sizeof(datos.numeros[1]));
+                    datos.resultado = suma(datos.numeros[0], datos.numeros[1]);
+                    write(client_fd, &datos.resultado, sizeof(datos.resultado));
+                    break;
+                case 2: // Resta
+                    read(client_fd, &datos.numeros[0], sizeof(datos.numeros[0]));
+                    read(client_fd, &datos.numeros[1], sizeof(datos.numeros[1]));
+                    datos.resultado = resta(datos.numeros[0], datos.numeros[1]);
+                    write(client_fd, &datos.resultado, sizeof(datos.resultado));
+                    break;
+                case 3: // Multiplicación
+                    read(client_fd, &datos.numeros[0], sizeof(datos.numeros[0]));
+                    read(client_fd, &datos.numeros[1], sizeof(datos.numeros[1]));
+                    datos.resultado = multiplicacio(datos.numeros[0], datos.numeros[1]);
+                    write(client_fd, &datos.resultado, sizeof(datos.resultado));
+                    break;
+                case 4: // División
+                    read(client_fd, &datos.numeros[0], sizeof(datos.numeros[0]));
+                    read(client_fd, &datos.numeros[1], sizeof(datos.numeros[1]));
+                    datos.resultado = divisio(datos.numeros[0], datos.numeros[1]);
+                    write(client_fd, &datos.resultado, sizeof(datos.resultado));
+                    break;
+                 case 5: // Seno
+                    read(client_fd, &datos.numeros[0], sizeof(datos.numeros[0]));
+                    datos.resultado = seno(datos.numeros[0]);
+                    write(client_fd, &datos.resultado, sizeof(datos.resultado));
+                    break;
+                case 6: // Coseno
+                    read(client_fd, &datos.numeros[0], sizeof(datos.numeros[0]));
+                    datos.resultado = coseno(datos.numeros[0]);
+                    write(client_fd, &datos.resultado, sizeof(datos.resultado));                    
+                    break;
+                case 7: // Tangente
+                    read(client_fd, &datos.numeros[0], sizeof(datos.numeros[0]));
+                    datos.resultado = tangente(datos.numeros[0]);
+                    write(client_fd, &datos.resultado, sizeof(datos.resultado));     
+                    break;
+                case 8: // ArcoSeno
+                    read(client_fd, &datos.numeros[0], sizeof(datos.numeros[0]));
+                    datos.resultado = arcSeno(datos.numeros[0]);
+                    write(client_fd, &datos.resultado, sizeof(datos.resultado));     
+                    break;
+                case 9: // ArcoCoseno
+                    read(client_fd, &datos.numeros[0], sizeof(datos.numeros[0]));
+                    datos.resultado = arcCoseno(datos.numeros[0]);
+                    write(client_fd, &datos.resultado, sizeof(datos.resultado));     
+                    break;
+                case 10: // ArcoTangente
+                    read(client_fd, &datos.numeros[0], sizeof(datos.numeros[0]));
+                    datos.resultado = arcTangente(datos.numeros[0]);
+                    write(client_fd, &datos.resultado, sizeof(datos.resultado));     
+                    break;
+                case 11: // Potencia
+                    read(client_fd, &datos.numeros[0], sizeof(datos.numeros[0]));
+                    read(client_fd, &datos.numeros[1], sizeof(datos.numeros[1]));
+                    datos.resultado = potencia(datos.numeros[0], datos.numeros[1]);
+                    write(client_fd, &datos.resultado, sizeof(datos.resultado));
+                    break;
+                case 12: // Raiz Quadrada
+                    read(client_fd, &datos.numeros[0], sizeof(datos.numeros[0]));
+                    datos.resultado = arrelQuadrada(datos.numeros[0]);
+                    write(client_fd, &datos.resultado, sizeof(datos.resultado));
+                    break;
+                case 13: // Modulo
+                    read(client_fd, &datos.numeros[0], sizeof(datos.numeros[0]));
+                    datos.resultado = modulo(datos.numeros[0]);
+                    write(client_fd, &datos.resultado, sizeof(datos.resultado));     
+                    break;
+                default:
+                    printf("Opción no válida. Inténtalo de nuevo.\n");
+                    break;
+            }
+        }
+    close(client_fd);
+    free(client_socket);
+
+         
+}
 
 
 int main() {
@@ -139,104 +226,37 @@ int main() {
         perror("Error al escuchar en el socket del servidor");
         exit(EXIT_FAILURE);
     }
-
-    // Lógica del servidor para manejar la solicitud del cliente.
     
+    // Lógica del servidor para manejar la solicitud del cliente.
     while (1) {
-        char buffer[1024];
-        int result;
-        bool salir;
         printf("Servidor en espera de conexiones...\n");
-        client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
-        printf("Cliente conectado!\n");
-        while (1) {
-            memset(buffer, 0, sizeof(buffer));
-            read (client_socket, &salir, sizeof(salir));
-            if (salir) {
-                printf("Cliente ha cerrado la conexión.\n");
-                break; // Cerramos la conexion. (Nota no podriamos hacerlo con un bool en el while por que ejecutaria todo el resto, interesa salir directamente).
-            }
-            
-            struct Datos datos;
-            read(client_socket, &datos.opcion, sizeof(datos.opcion));
-            switch (datos.opcion) {
-                case 1: // Suma
-                    read(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
-                    read(client_socket, &datos.numeros[1], sizeof(datos.numeros[1]));
-                    datos.resultado = suma(datos.numeros[0], datos.numeros[1]);
-                    write(client_socket, &datos.resultado, sizeof(datos.resultado));
-                    break;
-                case 2: // Resta
-                    read(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
-                    read(client_socket, &datos.numeros[1], sizeof(datos.numeros[1]));
-                    datos.resultado = resta(datos.numeros[0], datos.numeros[1]);
-                    write(client_socket, &datos.resultado, sizeof(datos.resultado));
-                    break;
-                case 3: // Multiplicación
-                    read(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
-                    read(client_socket, &datos.numeros[1], sizeof(datos.numeros[1]));
-                    datos.resultado = multiplicacio(datos.numeros[0], datos.numeros[1]);
-                    write(client_socket, &datos.resultado, sizeof(datos.resultado));
-                    break;
-                case 4: // División
-                    read(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
-                    read(client_socket, &datos.numeros[1], sizeof(datos.numeros[1]));
-                    datos.resultado = divisio(datos.numeros[0], datos.numeros[1]);
-                    write(client_socket, &datos.resultado, sizeof(datos.resultado));
-                    break;
-                 case 5: // Seno
-                    read(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
-                    datos.resultado = seno(datos.numeros[0]);
-                    write(client_socket, &datos.resultado, sizeof(datos.resultado));
-                    break;
-                case 6: // Coseno
-                    read(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
-                    datos.resultado = coseno(datos.numeros[0]);
-                    write(client_socket, &datos.resultado, sizeof(datos.resultado));                    
-                    break;
-                case 7: // Tangente
-                    read(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
-                    datos.resultado = tangente(datos.numeros[0]);
-                    write(client_socket, &datos.resultado, sizeof(datos.resultado));     
-                    break;
-                case 8: // ArcoSeno
-                    read(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
-                    datos.resultado = arcSeno(datos.numeros[0]);
-                    write(client_socket, &datos.resultado, sizeof(datos.resultado));     
-                    break;
-                case 9: // ArcoCoseno
-                    read(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
-                    datos.resultado = arcCoseno(datos.numeros[0]);
-                    write(client_socket, &datos.resultado, sizeof(datos.resultado));     
-                    break;
-                case 10: // ArcoTangente
-                    read(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
-                    datos.resultado = arcTangente(datos.numeros[0]);
-                    write(client_socket, &datos.resultado, sizeof(datos.resultado));     
-                    break;
-                case 11: // Potencia
-                    read(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
-                    read(client_socket, &datos.numeros[1], sizeof(datos.numeros[1]));
-                    datos.resultado = potencia(datos.numeros[0], datos.numeros[1]);
-                    write(client_socket, &datos.resultado, sizeof(datos.resultado));
-                    break;
-                case 12: // Raiz Quadrada
-                    read(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
-                    datos.resultado = arrelQuadrada(datos.numeros[0]);
-                    write(client_socket, &datos.resultado, sizeof(datos.resultado));
-                    break;
-                case 13: // Modulo
-                    read(client_socket, &datos.numeros[0], sizeof(datos.numeros[0]));
-                    datos.resultado = modulo(datos.numeros[0]);
-                    write(client_socket, &datos.resultado, sizeof(datos.resultado));     
-                    break;
-                default:
-                    printf("Opción no válida. Inténtalo de nuevo.\n");
-                    break;
-            }
+
+        if (num_clients >= MAX_CLIENTS) {
+            printf("Número máximo de clientes alcanzado. Espere...\n");
+            sleep(1);
+            continue; // Espera si se alcanzó el máximo de clientes.
         }
-        close(client_socket);
+
+        client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
+
+        if (client_socket < 0) {
+            perror("Error al aceptar la conexión del cliente");
+            continue; // Continuar esperando conexiones.
+        }
+        num_clients++;
+        printf("Cliente conectado! [%d]\n", num_clients);
+        
+
+        // Crea un hilo para manejar la conexión del cliente
+        pthread_t thread;
+        int* client_fd = (int*)malloc(sizeof(int));
+        *client_fd = client_socket;
+        pthread_create(&thread, NULL, mantenir_client, (void*)client_fd);
+
+        // Permite al hilo trabajar de manera independiente.
+        pthread_detach(thread);
     }
+    
     close(server_socket);
     return 0;
 }
