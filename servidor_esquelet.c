@@ -247,12 +247,12 @@ int main() {
         
 
         // Crea un hilo para manejar la conexión del cliente
-        pthread_t thread;
-        int* client_fd = (int*)malloc(sizeof(int));
-        *client_fd = client_socket;
-        pthread_create(&thread, NULL, mantenir_client, (void*)client_fd);
+        pthread_t thread; // Generar variable tipo pthread.
+        int* client_fd = (int*)malloc(sizeof(int)); // Reserva memoria din (se guarda descriptor del cliente), se asigna dir memoria a puntero client_fd.
+        *client_fd = client_socket; // Asignamos valor descriptor cliente.
+        pthread_create(&thread, NULL, mantenir_client, (void*)client_fd); // Creamos el hilo usando la funcion manternir_client.
 
-        // Permite al hilo trabajar de manera independiente.
+        // Se liberara espacio en memoria, cpu, etc automaticamente cuando termine el hilo.
         pthread_detach(thread);
     }
     
