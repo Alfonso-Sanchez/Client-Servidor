@@ -66,9 +66,9 @@ int main() {
     char input[MIDA_BUFFER];
     int result;
     bool salir;
-
+    bool num_max;
     while (1) {
-        
+
         menu();
         int operacion;
         float resultado;

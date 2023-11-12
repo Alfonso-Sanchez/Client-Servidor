@@ -25,7 +25,7 @@ struct Datos {
 
 #define MAX_CLIENTS 3
 #define PORT 12345
-int num_clients = 0; // TE QUE SER UNA GLOBAL EN AQUEST CAS! 
+int num_clients = 3; // TE QUE SER UNA GLOBAL EN AQUEST CAS! 
 
 //Funcio per a sumar dos numeros
 float suma(float n1, float n2){
@@ -66,7 +66,7 @@ float arrelQuadrada(float n1){
 
 //Funcio que fa el modul#define _USE_MATH_DEFINESalcula el factorial
 int factorial(int n) {
-    if (n == 0 || n == 1) {
+    if (n == 0 || n == 1) { 
         return 1;
     } else {
         return n * factorial(n - 1);
@@ -83,7 +83,7 @@ float seno (float num) {
     return sin((num * M_PI) / 180.0);
 }
 
-float coseno (float num) {
+float coseno (float num) { 
     return cos((num * M_PI) / 180.0);
 }
 
@@ -230,8 +230,7 @@ int main() {
     // Lógica del servidor para manejar la solicitud del cliente.
     while (1) {
         printf("Servidor en espera de conexiones...\n");
-
-        if (num_clients >= MAX_CLIENTS) {
+        if (num_clients > MAX_CLIENTS) {
             printf("Número máximo de clientes alcanzado. Espere...\n");
             sleep(1);
             continue; // Espera si se alcanzó el máximo de clientes.
