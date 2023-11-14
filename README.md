@@ -1,4 +1,4 @@
-Benvingut a la practica *client-servidor*. 
+Benvingut a la practica **client-servidor**. 
 
 Aquesta codi permet executar una aplicacio client-servidor. En aquest cas tenim un servidor que realitza una serie de operacions matematiques solicitades pel client. Ademes esta implementat la posibilitat de que el servidor suporti mes de 1 client. 
 
