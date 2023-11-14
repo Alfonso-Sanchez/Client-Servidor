@@ -233,7 +233,7 @@ int main() {
         if (num_clients > MAX_CLIENTS) {
             printf("Número máximo de clientes alcanzado. Espere...\n");
             sleep(1);
-            continue; // Espera si se alcanzó el máximo de clientes.
+            continue; // Espera si se alcanzó el máximo de clientes. // Aqui seria donde se podria hacer el control de usuarios!! 
         }
 
         client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &client_addr_len);
