@@ -226,7 +226,7 @@ int main() {
         perror("Error al escuchar en el socket del servidor");
         exit(EXIT_FAILURE);
     }
-    
+    num_clients = 0;
     // Lógica del servidor para manejar la solicitud del cliente.
     while (1) {
         printf("Servidor en espera de conexiones...\n");
