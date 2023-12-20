@@ -7,6 +7,7 @@ Necesita els seguent requisits:
 - C i gcc configurat per defecte.
 - Compilacion de client.c -> gcc client_esquelet.c -o client
 - Compilacion de servidor.c -> gcc servidor_esquelet.c -o servidor -lm // Necesita hacer uso del linker para que sincronice la libreria MATH.H.
+
 Els autors d'aquesta practica son:
 Eduard Vericat Batalla. 
 Alfonso Sanchez Ferrer. 
