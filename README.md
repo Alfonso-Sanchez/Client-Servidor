@@ -1,16 +1,23 @@
-Benvingut a la practica **client-servidor**. 
+# Client-Server Practice
 
-Aquesta codi permet executar una aplicacio client-servidor. En aquest cas tenim un servidor que realitza una serie de operacions matematiques solicitades pel client. Ademes esta implementat la posibilitat de que el servidor suporti mes de 1 client. 
+## Overview
 
-Necesita els seguent requisits:
-- Linux configurat
-- C i gcc configurat per defecte.
-- Compilacion de client.c -> gcc client_esquelet.c -o client
-- Compilacion de servidor.c -> gcc servidor_esquelet.c -o servidor -lm // Necesita hacer uso del linker para que sincronice la libreria MATH.H.
+This code implements a client-server application. It features a server that performs mathematical operations requested by the client. Additionally, the server is designed to support multiple clients simultaneously.
 
-Els autors d'aquesta practica son:
-Eduard Vericat Batalla. 
-Alfonso Sanchez Ferrer. 
+## Requirements
 
-Gracies a tot el profesorat de XD per el seu soport i material.
+To run this application, you will need the following:
 
+*   A configured Linux environment.
+*   C and GCC installed with default settings.
+*   Compilation of `client.c`: `gcc client_esquelet.c -o client`
+*   Compilation of `server.c`: `gcc servidor_esquelet.c -o servidor -lm` (This requires the linker to synchronize the `MATH.H` library.)
+
+## Authors
+
+*   Eduard Vericat Batalla
+*   Alfonso Sanchez Ferrer
+
+## Acknowledgements
+
+Thank you to all the XD professors for their support and materials.
